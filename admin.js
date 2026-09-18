@@ -682,13 +682,760 @@
     function renderHeroEditor() {
         const data = getData('hero') || {};
         const defaults = {
+            badge: 'Architecture & Design',
+            title: 'Creative <span>Architecture Student</span> Passionate about Spatial Planning & Design',
+            headline: 'Architectural Design • Interior • Landscape',
+            description: "Hi, I'm <strong>Farah Maher Saleh</strong>. A detail-oriented Architecture student with a strong foundation in architectural design, technical drafting, and 3D visualization.",
+            stat1Value: '4+',
+            stat1Label: 'Key Projects',
+            stat2Value: '2027',
+            stat2Label: 'Expected Grad',
+            cvFileName: 'Farah_Maher_CV.docx'
+        };;
+        const d = { ...defaults, ...data };
+
+        const section = document.createElement('div');
+        section.className = 'editor-section active';
+        section.innerHTML = `
+            <div class="editor-header">
+                <h2 class="editor-title">Hero Section</h2>
+                <p class="editor-description">Edit the main landing area of your portfolio.</p>
+            </div>
+
+            <div class="editor-card">
+                <h3 class="editor-card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    Hero Content
+                </h3>
+                <div class="form-group">
+                    <label class="form-label">Availability Badge</label>
+                    <input type="text" class="form-input" id="hero-badge" value="${escapeHtml(d.badge)}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Hero Title (HTML allowed)</label>
+                    <textarea class="form-textarea" id="hero-title" rows="2">${d.title}</textarea>
+                    <div class="form-hint">Use &lt;span&gt; tags for gradient-colored text.</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Headline</label>
+                    <input type="text" class="form-input" id="hero-headline" value="${escapeHtml(d.headline)}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description (HTML allowed)</label>
+                    <textarea class="form-textarea" id="hero-description" rows="4">${d.description}</textarea>
+                </div>
+            </div>
+
+            <div class="editor-card">
+                <h3 class="editor-card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    Profile Image
+                </h3>
+                <div id="hero-image-upload"></div>
+            </div>
+
+            <div class="editor-card">
+                <h3 class="editor-card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    Stats & CV
+                </h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Stat 1 Value</label>
+                        <input type="text" class="form-input" id="hero-stat1-value" value="${escapeHtml(d.stat1Value)}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Stat 1 Label</label>
+                        <input type="text" class="form-input" id="hero-stat1-label" value="${escapeHtml(d.stat1Label)}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Stat 2 Value</label>
+                        <input type="text" class="form-input" id="hero-stat2-value" value="${escapeHtml(d.stat2Value)}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Stat 2 Label</label>
+                        <input type="text" class="form-input" id="hero-stat2-label" value="${escapeHtml(d.stat2Label)}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">CV Filename</label>
+                    <input type="text" class="form-input" id="hero-cv" value="${escapeHtml(d.cvFileName)}">
+                    <div class="form-hint">Filename of the CV in the project root (e.g., Farah_Maher_CV_v2.pdf)</div>
+                </div>
+            </div>
+
+            <div class="editor-actions">
+                <button class="admin-btn admin-btn-primary" id="hero-save">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    Save Hero
+                </button>
+                <div class="editor-actions-right">
+                    <button class="admin-btn admin-btn-danger admin-btn-sm" id="hero-reset">Reset to Default</button>
+                </div>
+            </div>
+        `;
+
+        adminContent.appendChild(section);
+
+        // Image upload
+        const imgContainer = document.getElementById('hero-image-upload');
+        imgContainer.appendChild(createImageUpload('assets/images/Farah_photo.jpg', 'assets/images/Farah_photo.jpg'));
+
+        // Save
+        document.getElementById('hero-save').addEventListener('click', () => {
+            saveData('hero', {
+                badge: document.getElementById('hero-badge').value,
+                title: document.getElementById('hero-title').value,
+                headline: document.getElementById('hero-headline').value,
+                description: document.getElementById('hero-description').value,
+                stat1Value: document.getElementById('hero-stat1-value').value,
+                stat1Label: document.getElementById('hero-stat1-label').value,
+                stat2Value: document.getElementById('hero-stat2-value').value,
+                stat2Label: document.getElementById('hero-stat2-label').value,
+                cvFileName: document.getElementById('hero-cv').value
+            });
+            showToast('success', 'Hero Saved', 'Hero section updated. Refresh the portfolio to see changes.');
+        });
+
+        // Reset
+        document.getElementById('hero-reset').addEventListener('click', () => {
+            if (confirm('Reset hero section to defaults?')) {
+                removeData('hero');
+                removeImage('assets/images/Farah_photo.jpg');
+                showToast('info', 'Hero Reset', 'Hero section reverted to defaults.');
+                renderHeroEditor();
+            }
+        });
+    }
+
+    // --- ABOUT EDITOR ---
+    function renderAboutEditor() {
+        const data = getData('about') || {};
+        const defaults = {
+            leadParagraph: 'Detail-oriented Architecture student at Damanhur University with a strong foundation in architectural design, spatial planning, technical drafting, and 3D visualization.',
+            paragraph2: 'Experienced across academic and voluntary projects spanning educational facilities, commercial showrooms, and landscape master plans. Proficient in AutoCAD, SketchUp, Lumion, V-Ray, and Photoshop. Growing expertise in interior design visualization and UI/UX.',
+            paragraph3: 'Eager to contribute creative design solutions and technical precision to a professional architectural firm.',
+            feature1Title: 'Architectural Design',
+            feature1Desc: 'Specialized in spatial planning, creating functional and aesthetic environments for residential and commercial spaces.',
+            feature2Title: '3D Visualization',
+            feature2Desc: 'Skilled in modeling and rendering realistic architectural and interior visualizations.',
+            location: 'Damanhur, Beheira, Egypt',
+            educationFocus: 'B.Sc. Architecture Engineering',
+            graduationYear: 'Expected 2027',
+            languages: 'Arabic (Native) • English (Good)'
+        };;
+        const d = { ...defaults, ...data };
+
+        const section = document.createElement('div');
+        section.className = 'editor-section active';
+        section.innerHTML = `
+            <div class="editor-header">
+                <h2 class="editor-title">About Section</h2>
+                <p class="editor-description">Edit the introduction and personal details.</p>
+            </div>
+
+            <div class="editor-card">
+                <h3 class="editor-card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    About Text
+                </h3>
+                <div class="form-group">
+                    <label class="form-label">Lead Paragraph</label>
+                    <textarea class="form-textarea" id="about-lead" rows="3">${escapeHtml(d.leadParagraph)}</textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Second Paragraph</label>
+                    <textarea class="form-textarea" id="about-p2" rows="3">${escapeHtml(d.paragraph2)}</textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Third Paragraph</label>
+                    <textarea class="form-textarea" id="about-p3" rows="3">${escapeHtml(d.paragraph3)}</textarea>
+                </div>
+            </div>
+
+            <div class="editor-card">
+                <h3 class="editor-card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                    Feature Cards
+                </h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Feature 1 Title</label>
+                        <input type="text" class="form-input" id="about-f1-title" value="${escapeHtml(d.feature1Title)}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Feature 2 Title</label>
+                        <input type="text" class="form-input" id="about-f2-title" value="${escapeHtml(d.feature2Title)}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Feature 1 Description</label>
+                    <textarea class="form-textarea" id="about-f1-desc" rows="2">${escapeHtml(d.feature1Desc)}</textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Feature 2 Description</label>
+                    <textarea class="form-textarea" id="about-f2-desc" rows="2">${escapeHtml(d.feature2Desc)}</textarea>
+                </div>
+            </div>
+
+            <div class="editor-card">
+                <h3 class="editor-card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Candidate Details Sidebar
+                </h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Current Location</label>
+                        <input type="text" class="form-input" id="about-location" value="${escapeHtml(d.location)}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Education Focus</label>
+                        <input type="text" class="form-input" id="about-edu-focus" value="${escapeHtml(d.educationFocus)}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Graduation Year</label>
+                        <input type="text" class="form-input" id="about-grad" value="${escapeHtml(d.graduationYear)}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Languages</label>
+                        <input type="text" class="form-input" id="about-languages" value="${escapeHtml(d.languages)}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="editor-actions">
+                <button class="admin-btn admin-btn-primary" id="about-save">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    Save About
+                </button>
+                <div class="editor-actions-right">
+                    <button class="admin-btn admin-btn-danger admin-btn-sm" id="about-reset">Reset to Default</button>
+                </div>
+            </div>
+        `;
+        adminContent.appendChild(section);
+
+        document.getElementById('about-save').addEventListener('click', () => {
+            saveData('about', {
+                leadParagraph: document.getElementById('about-lead').value,
+                paragraph2: document.getElementById('about-p2').value,
+                paragraph3: document.getElementById('about-p3').value,
+                feature1Title: document.getElementById('about-f1-title').value,
+                feature1Desc: document.getElementById('about-f1-desc').value,
+                feature2Title: document.getElementById('about-f2-title').value,
+                feature2Desc: document.getElementById('about-f2-desc').value,
+                location: document.getElementById('about-location').value,
+                educationFocus: document.getElementById('about-edu-focus').value,
+                graduationYear: document.getElementById('about-grad').value,
+                languages: document.getElementById('about-languages').value
+            });
+            showToast('success', 'About Saved', 'About section updated.');
+        });
+
+        document.getElementById('about-reset').addEventListener('click', () => {
+            if (confirm('Reset about section to defaults?')) {
+                removeData('about');
+                showToast('info', 'About Reset', '');
+                renderAboutEditor();
+            }
+        });
+    }
+
+    // --- EXPERIENCE EDITOR ---
+    function renderExperienceEditor() {
+        const data = getData('experience') || {};
+        const defaults = {
+            entries: [
+                {
+                    role: 'Primary School Design',
+                    company: 'Academic Project',
+                    badge: 'Architecture',
+                    duration: '2023 – 2024',
+                    bullets: [
+                        'Designed an educational facility with structured zoning separating educational, administrative, and recreational areas to ensure safety and functionality.',
+                        'Incorporated interactive outdoor learning areas promoting student engagement and physical activity.'
+                    ],
+                    skills: ['AutoCAD', 'SketchUp', 'Lumion', 'Photoshop']
+                },
+                {
+                    role: 'Car Showroom Design',
+                    company: 'Academic Project',
+                    badge: 'Architecture',
+                    duration: '2023 – 2024',
+                    bullets: [
+                        'Conceptualized a modern commercial showroom with a geometric facade balancing aesthetic impact and sun-shading functionality.',
+                        'Produced complete hand-drawn documentation including plans, elevations, and perspectives; proposed sustainable cladding materials.'
+                    ],
+                    skills: ['Freehand sketching', 'Manual drafting', 'Marker rendering']
+                },
+                {
+                    role: 'University Campus Landscape Design',
+                    company: 'Academic Project',
+                    badge: 'Landscape',
+                    duration: '2024 – 2025',
+                    bullets: [
+                        'Developed a sustainable landscape master plan optimizing land use with multi-functional zones and clear pedestrian circulation.',
+                        'Applied sustainable strategies including low-maintenance greenery selection and water-efficient irrigation planning.'
+                    ],
+                    skills: ['AutoCAD', 'SketchUp', 'Lumion', 'Photoshop']
+                },
+                {
+                    role: 'Student Housing Landscape Design',
+                    company: 'Voluntary Project',
+                    badge: 'Landscape',
+                    duration: '2024 – 2025',
+                    bullets: [
+                        'Designed gender-segregated spatial zoning ensuring privacy, comfort, and dedicated outdoor social areas for each housing zone.'
+                    ],
+                    skills: ['AutoCAD', 'SketchUp', 'Lumion']
+                },
+                {
+                    role: 'Interior Design Visualization',
+                    company: 'Personal Development',
+                    badge: 'Interior',
+                    duration: '2024 – Present',
+                    bullets: [
+                        'Self-directed exploration of space planning and photorealistic visualization across residential, commercial, and hospitality typologies.',
+                        'Developing material selection and lighting technique skills.'
+                    ],
+                    skills: ['Interior Design', 'Visualization', 'Space Planning']
+                }
+            ]
+        };;
+        const d = { ...defaults, ...data };
+
+        const section = document.createElement('div');
+        section.className = 'editor-section active';
+
+        const header = document.createElement('div');
+        header.className = 'editor-header';
+        header.innerHTML = `
+            <h2 class="editor-title">Experience Section</h2>
+            <p class="editor-description">Add, edit, or remove work experience entries.</p>
+        `;
+        section.appendChild(header);
+
+        const list = document.createElement('div');
+        list.className = 'dynamic-list';
+
+        function renderEntries() {
+            list.innerHTML = '';
+            d.entries.forEach((entry, i) => {
+                const item = document.createElement('div');
+                item.className = 'dynamic-item';
+                item.innerHTML = `
+                    <div class="dynamic-item-header">
+                        <span class="dynamic-item-title">Entry #${i + 1}: ${escapeHtml(entry.role)} at ${escapeHtml(entry.company)}</span>
+                        <div class="dynamic-item-actions">
+                            <button class="admin-btn admin-btn-danger admin-btn-icon" title="Remove" data-remove="${i}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                const body = document.createElement('div');
+
+                // Role & company
+                const row1 = document.createElement('div');
+                row1.className = 'form-row';
+                row1.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label">Role Title</label>
+                        <input type="text" class="form-input exp-role" data-idx="${i}" value="${escapeHtml(entry.role)}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company</label>
+                        <input type="text" class="form-input exp-company" data-idx="${i}" value="${escapeHtml(entry.company)}">
+                    </div>
+                `;
+                body.appendChild(row1);
+
+                const row2 = document.createElement('div');
+                row2.className = 'form-row';
+                row2.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label">Badge</label>
+                        <input type="text" class="form-input exp-badge" data-idx="${i}" value="${escapeHtml(entry.badge)}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Duration</label>
+                        <input type="text" class="form-input exp-duration" data-idx="${i}" value="${escapeHtml(entry.duration)}">
+                    </div>
+                `;
+                body.appendChild(row2);
+
+                // Bullets
+                const bulletsEditor = createBulletEditor('Bullet Points', entry.bullets);
+                bulletsEditor._entryIndex = i;
+                body.appendChild(bulletsEditor);
+
+                // Skills tags
+                const tagsEditor = createTagsEditor('Skills Tags', entry.skills, 'Type a skill...');
+                tagsEditor._entryIndex = i;
+                body.appendChild(tagsEditor);
+
+                item.appendChild(body);
+                list.appendChild(item);
+
+                // Remove handler
+                item.querySelector(`[data-remove="${i}"]`).addEventListener('click', () => {
+                    if (confirm(`Remove "${entry.role}" entry?`)) {
+                        d.entries.splice(i, 1);
+                        renderEntries();
+                    }
+                });
+            });
+
+            // Add button
+            const addBtn = document.createElement('button');
+            addBtn.type = 'button';
+            addBtn.className = 'add-item-btn';
+            addBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Experience Entry';
+            addBtn.addEventListener('click', () => {
+                d.entries.push({
+                    role: 'New Role',
+                    company: 'Company Name',
+                    badge: 'Type',
+                    duration: 'Start â€“ End',
+                    bullets: ['Describe your responsibility...'],
+                    skills: ['Skill']
+                });
+                renderEntries();
+            });
+            list.appendChild(addBtn);
+        }
+
+        renderEntries();
+        section.appendChild(list);
+
+        // Actions
+        const actions = document.createElement('div');
+        actions.className = 'editor-actions';
+        actions.innerHTML = `
+            <button class="admin-btn admin-btn-primary" id="exp-save">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Save Experience
+            </button>
+            <div class="editor-actions-right">
+                <button class="admin-btn admin-btn-danger admin-btn-sm" id="exp-reset">Reset to Default</button>
+            </div>
+        `;
+        section.appendChild(actions);
+        adminContent.appendChild(section);
+
+        document.getElementById('exp-save').addEventListener('click', () => {
+            // Collect data from DOM
+            d.entries.forEach((entry, i) => {
+                const roleInput = document.querySelector(`.exp-role[data-idx="${i}"]`);
+                const companyInput = document.querySelector(`.exp-company[data-idx="${i}"]`);
+                const badgeInput = document.querySelector(`.exp-badge[data-idx="${i}"]`);
+                const durationInput = document.querySelector(`.exp-duration[data-idx="${i}"]`);
+                if (roleInput) entry.role = roleInput.value;
+                if (companyInput) entry.company = companyInput.value;
+                if (badgeInput) entry.badge = badgeInput.value;
+                if (durationInput) entry.duration = durationInput.value;
+
+                // Get bullets from bullet editors
+                const bulletEditors = document.querySelectorAll('.bullet-list-editor');
+                if (bulletEditors[i]) {
+                    entry.bullets = bulletEditors[i]._bullets;
+                }
+
+                // Get tags
+                const tagEditors = document.querySelectorAll('.tags-editor');
+                if (tagEditors[i]) {
+                    entry.skills = tagEditors[i]._tags;
+                }
+            });
+
+            saveData('experience', { entries: d.entries });
+            showToast('success', 'Experience Saved', 'Experience section updated.');
+        });
+
+        document.getElementById('exp-reset').addEventListener('click', () => {
+            if (confirm('Reset experience to defaults?')) {
+                removeData('experience');
+                showToast('info', 'Experience Reset', '');
+                renderExperienceEditor();
+            }
+        });
+    }
+
+    // --- SKILLS EDITOR ---
+    function renderSkillsEditor() {
+        const data = getData('skills') || {};
+        const defaults = {
+            entries: [
+                { name: 'AutoCAD', category: 'design', progress: 90 },
+                { name: 'SketchUp', category: 'design', progress: 85 },
+                { name: '3ds Max', category: 'design', progress: 70 },
+                { name: 'Adobe Photoshop', category: 'design', progress: 80 },
+                { name: 'Lumion', category: 'render', progress: 85 },
+                { name: 'V-Ray for SketchUp', category: 'render', progress: 75 },
+                { name: 'V-Ray for 3ds Max', category: 'render', progress: 65 },
+                { name: 'Shop Drawings', category: 'drafting', progress: 85 },
+                { name: 'Technical Drafting', category: 'drafting', progress: 90 },
+                { name: 'Freehand Sketching', category: 'drafting', progress: 80 },
+                { name: 'Problem-Solving', category: 'soft', progress: 85 },
+                { name: 'Attention to Detail', category: 'soft', progress: 90 },
+                { name: 'Time Management', category: 'soft', progress: 80 }
+            ]
+        };;
+        const d = { ...defaults, ...data };
+
+        const section = document.createElement('div');
+        section.className = 'editor-section active';
+
+        const header = document.createElement('div');
+        header.className = 'editor-header';
+        header.innerHTML = `
+            <h2 class="editor-title">Skills Section</h2>
+            <p class="editor-description">Manage your professional skills with categories and proficiency levels.</p>
+        `;
+        section.appendChild(header);
+
+        const list = document.createElement('div');
+        list.className = 'dynamic-list';
+
+        function renderSkills() {
+            list.innerHTML = '';
+            d.entries.forEach((skill, i) => {
+                const item = document.createElement('div');
+                item.className = 'dynamic-item';
+                item.innerHTML = `
+                    <div class="dynamic-item-header">
+                        <span class="dynamic-item-title">${escapeHtml(skill.name)} (${skill.progress}%)</span>
+                        <div class="dynamic-item-actions">
+                            <button class="admin-btn admin-btn-danger admin-btn-icon" title="Remove" data-remove="${i}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Skill Name</label>
+                            <input type="text" class="form-input skill-name" data-idx="${i}" value="${escapeHtml(skill.name)}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select class="form-select skill-category" data-idx="${i}">
+                                <option value="business" ${skill.category === 'business' ? 'selected' : ''}>Business & Sales</option>
+                                <option value="hr" ${skill.category === 'hr' ? 'selected' : ''}>HR & Operations</option>
+                                <option value="technical" ${skill.category === 'technical' ? 'selected' : ''}>Technical & Tools</option>
+                                <option value="soft" ${skill.category === 'soft' ? 'selected' : ''}>Soft Skills</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Proficiency (${skill.progress}%)</label>
+                        <div class="form-range-wrapper">
+                            <input type="range" class="form-range skill-progress" data-idx="${i}" min="0" max="100" value="${skill.progress}">
+                            <span class="form-range-value">${skill.progress}%</span>
+                        </div>
+                    </div>
+                `;
+
+                // Range value live update
+                const rangeInput = item.querySelector('.form-range');
+                const rangeValue = item.querySelector('.form-range-value');
+                const progLabel = item.querySelector('.form-group:last-child .form-label');
+                rangeInput.addEventListener('input', () => {
+                    rangeValue.textContent = rangeInput.value + '%';
+                    progLabel.textContent = `Proficiency (${rangeInput.value}%)`;
+                });
+
+                // Remove
+                item.querySelector(`[data-remove="${i}"]`).addEventListener('click', () => {
+                    d.entries.splice(i, 1);
+                    renderSkills();
+                });
+
+                list.appendChild(item);
+            });
+
+            // Add
+            const addBtn = document.createElement('button');
+            addBtn.type = 'button';
+            addBtn.className = 'add-item-btn';
+            addBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Skill';
+            addBtn.addEventListener('click', () => {
+                d.entries.push({ name: 'New Skill', category: 'business', progress: 75 });
+                renderSkills();
+            });
+            list.appendChild(addBtn);
+        }
+
+        renderSkills();
+        section.appendChild(list);
+
+        const actions = document.createElement('div');
+        actions.className = 'editor-actions';
+        actions.innerHTML = `
+            <button class="admin-btn admin-btn-primary" id="skills-save">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Save Skills
+            </button>
+            <div class="editor-actions-right">
+                <button class="admin-btn admin-btn-danger admin-btn-sm" id="skills-reset">Reset to Default</button>
+            </div>
+        `;
+        section.appendChild(actions);
+        adminContent.appendChild(section);
+
+        document.getElementById('skills-save').addEventListener('click', () => {
+            d.entries.forEach((skill, i) => {
+                const nameInput = document.querySelector(`.skill-name[data-idx="${i}"]`);
+                const catSelect = document.querySelector(`.skill-category[data-idx="${i}"]`);
+                const progRange = document.querySelector(`.skill-progress[data-idx="${i}"]`);
+                if (nameInput) skill.name = nameInput.value;
+                if (catSelect) skill.category = catSelect.value;
+                if (progRange) skill.progress = parseInt(progRange.value);
+            });
+            saveData('skills', { entries: d.entries });
+            showToast('success', 'Skills Saved', 'Skills section updated.');
+        });
+
+        document.getElementById('skills-reset').addEventListener('click', () => {
+            if (confirm('Reset skills to defaults?')) {
+                removeData('skills');
+                showToast('info', 'Skills Reset', '');
+                renderSkillsEditor();
+            }
+        });
+    }
+
+    // --- CERTIFICATIONS EDITOR ---
+    function renderCertificationsEditor() {
+        const data = getData('certifications') || {};
+        const defaults = {
+            entries: [
+                {
+                    title: 'Interior Design Basics',
+                    issuer: 'Online Learning',
+                    summary: 'Explored core interior design principles and visualization workflows.'
+                },
+                {
+                    title: 'Advanced AutoCAD Drafting',
+                    issuer: 'Engineering Syndicate',
+                    summary: 'Mastered complex technical and shop drawings.'
+                }
+            ]
+        };;
+        const d = { ...defaults, ...data };
+
+        const section = document.createElement('div');
+        section.className = 'editor-section active';
+
+        const header = document.createElement('div');
+        header.className = 'editor-header';
+        header.innerHTML = `
+            <h2 class="editor-title">Certifications Section</h2>
+            <p class="editor-description">Manage certifications and training projects.</p>
+        `;
+        section.appendChild(header);
+
+        const list = document.createElement('div');
+        list.className = 'dynamic-list';
+
+        function renderCerts() {
+            list.innerHTML = '';
+            d.entries.forEach((cert, i) => {
+                const item = document.createElement('div');
+                item.className = 'dynamic-item';
+                item.innerHTML = `
+                    <div class="dynamic-item-header">
+                        <span class="dynamic-item-title">${escapeHtml(cert.title)}</span>
+                        <div class="dynamic-item-actions">
+                            <button class="admin-btn admin-btn-danger admin-btn-icon" title="Remove" data-remove="${i}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Certification Title</label>
+                        <input type="text" class="form-input cert-title" data-idx="${i}" value="${escapeHtml(cert.title)}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Issuer</label>
+                        <input type="text" class="form-input cert-issuer" data-idx="${i}" value="${escapeHtml(cert.issuer)}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Training Project Summary</label>
+                        <textarea class="form-textarea cert-summary" data-idx="${i}" rows="3">${escapeHtml(cert.summary)}</textarea>
+                    </div>
+                `;
+                item.querySelector(`[data-remove="${i}"]`).addEventListener('click', () => {
+                    d.entries.splice(i, 1);
+                    renderCerts();
+                });
+                list.appendChild(item);
+            });
+
+            const addBtn = document.createElement('button');
+            addBtn.type = 'button';
+            addBtn.className = 'add-item-btn';
+            addBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Certification';
+            addBtn.addEventListener('click', () => {
+                d.entries.push({ title: 'New Certification', issuer: 'Issuer Name', summary: 'Description...' });
+                renderCerts();
+            });
+            list.appendChild(addBtn);
+        }
+
+        renderCerts();
+        section.appendChild(list);
+
+        const actions = document.createElement('div');
+        actions.className = 'editor-actions';
+        actions.innerHTML = `
+            <button class="admin-btn admin-btn-primary" id="certs-save">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Save Certifications
+            </button>
+            <div class="editor-actions-right">
+                <button class="admin-btn admin-btn-danger admin-btn-sm" id="certs-reset">Reset to Default</button>
+            </div>
+        `;
+        section.appendChild(actions);
+        adminContent.appendChild(section);
+
+        document.getElementById('certs-save').addEventListener('click', () => {
+            d.entries.forEach((cert, i) => {
+                const t = document.querySelector(`.cert-title[data-idx="${i}"]`);
+                const is = document.querySelector(`.cert-issuer[data-idx="${i}"]`);
+                const s = document.querySelector(`.cert-summary[data-idx="${i}"]`);
+                if (t) cert.title = t.value;
+                if (is) cert.issuer = is.value;
+                if (s) cert.summary = s.value;
+            });
+            saveData('certifications', { entries: d.entries });
+            showToast('success', 'Certifications Saved', '');
+        });
+
+        document.getElementById('certs-reset').addEventListener('click', () => {
+            if (confirm('Reset certifications to defaults?')) {
+                removeData('certifications');
+                showToast('info', 'Certifications Reset', '');
+                renderCertificationsEditor();
+            }
+        });
+    }
+
+    // --- EDUCATION EDITOR ---
+    function renderEducationEditor() {
+        const data = getData('education') || {};
+        const defaults = {
             institution: 'Damanhur University, Egypt',
             degree: 'B.Sc. in Architecture Engineering',
             faculty: 'Faculty of Engineering',
             graduationDate: 'Expected Graduation: July 2027',
             curriculum: 'Architecture Department',
             grade: 'Very Good'
-        };
+        };;
         const d = { ...defaults, ...data };
 
         const section = document.createElement('div');
@@ -769,13 +1516,14 @@
     function renderContactEditor() {
         const data = getData('contact') || {};
         const defaults = {
-            introParagraph: 'I am open to internships, entry-level opportunities, and graduate development programs in HR Operations,const defaults = {
-            pageTitle: 'Farah Maher | Architecture & Design Portfolio',
-            metaDescription: 'Professional portfolio of Farah Maher, an Architecture student specializing in architectural design, interior, and landscape design.',
-            metaKeywords: 'Farah Maher, Architecture, Architectural Design, Interior Design, Landscape Design, Damanhur University',
-            ogTitle: 'Farah Maher | Architecture Portfolio',
-            ogDescription: 'Explore the professional projects, skills, and designs of Farah Maher in Architecture.'
-        };
+            introParagraph: 'I am open to internships, entry-level opportunities, and graduate development programs in Architecture and Design. Please feel free to reach out via phone, email, or LinkedIn.',
+            email: 'farahmaher164@gmail.com',
+            phone: '+20 101 692 4332',
+            location: 'Damanhur, Beheira, Egypt',
+            linkedin: 'https://linkedin.com/in/farah-maher',
+            linkedinDisplay: 'linkedin.com/in/farah-maher',
+            web3formsKey: 'YOUR_ACCESS_KEY_HERE'
+        };;
         const d = { ...defaults, ...data };
 
         const section = document.createElement('div');
@@ -871,12 +1619,12 @@
     function renderSEOEditor() {
         const data = getData('seo') || {};
         const defaults = {
-            pageTitle: 'Farah Maher | Business Development, HR Operations & Sales Professional',
-            metaDescription: 'Professional portfolio of Farah Maher, a Commerce student specializing in Business Development, HR Operations, Sales Management, and Client Relationship Management. Ready for entry-level opportunities.',
-            metaKeywords: 'Farah Maher, HR Operations, Business Development, Sales, Real Estate Sales, Enactus HR, Damanhur University, Commerce English, Creativa MCIT',
-            ogTitle: 'Farah Maher | Professional Portfolio',
-            ogDescription: 'Explore the professional experience, skills, and certifications of Farah Maher in Sales, HR Operations, and Business Development.'
-        };
+            pageTitle: 'Farah Maher | Architecture & Design Portfolio',
+            metaDescription: 'Professional portfolio of Farah Maher, an Architecture student specializing in architectural design, interior, and landscape design.',
+            metaKeywords: 'Farah Maher, Architecture, Architectural Design, Interior Design, Landscape Design, Damanhur University',
+            ogTitle: 'Farah Maher | Architecture Portfolio',
+            ogDescription: 'Explore the professional projects, skills, and designs of Farah Maher in Architecture.'
+        };;
         const d = { ...defaults, ...data };
 
         const section = document.createElement('div');
@@ -957,9 +1705,9 @@
     function renderFooterEditor() {
         const data = getData('footer') || {};
         const defaults = {
-            copyrightText: 'Â© 2026 Mohamed El-hemaly. All Rights Reserved.',
-            copyrightLink: 'https://mohamedelhemaly.github.io/portfolio/'
-        };
+            copyrightText: '© 2026 Farah Maher. All Rights Reserved.',
+            copyrightLink: '#'
+        };;
         const d = { ...defaults, ...data };
 
         const section = document.createElement('div');
